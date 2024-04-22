@@ -27,6 +27,8 @@ Axios: Axios is utilized for making HTTP requests to external APIs, ensuring eff
 Netlify: The application is hosted and deployed on Netlify, leveraging its features such as automatic deployments for seamless deployment workflows.
 
 
-Project description
 Instructions for local setup and deployment
-Citations to any code used from external sources
+
+To start project 
+Get your developer API Key from https://developer-acct.ticketmaster.com/user/register
+npm run dev
