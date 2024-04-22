@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,23 +13,18 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { loginSuccess, loginFailure } from '../redux/authSlice'
+import { loginSuccess, loginFailure } from '../redux/authSlice';
+import { Formik, useFormik } from 'formik';
+
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [error, setError] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-
+  const handleLogin = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -38,11 +32,31 @@ export default function SignIn() {
         navigate("/");
       })
       .catch((error) => {
-        setError(true);
         dispatch(loginFailure(error.message));
-
       });
   };
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validate: values => {
+      const errors = {};
+      if (!values.email) {
+        errors.email = 'Required';
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+      }
+      if (!values.password) {
+        errors.password = 'Required';
+      }
+      return errors;
+    },
+    onSubmit: values => {
+      handleLogin(values);
+    }
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -62,34 +76,34 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          {error && <span>Wrong email or password!</span>}
-          <Box
-            component="form"
-            onSubmit={handleLogin}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          {formik.errors.email && formik.touched.email && <Typography color="error">{formik.errors.email}</Typography>}
+          {formik.errors.password && formik.touched.password && <Typography color="error">{formik.errors.password}</Typography>}
+          <form onSubmit={formik.handleSubmit} noValidate>
             <TextField
               margin="normal"
-              required
               fullWidth
               id="email"
-              label="Email Address"
               name="email"
+              label="Email Address"
               autoComplete="email"
               autoFocus
-              onChange={(e) => setEmail(e.target.value)}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
             <TextField
               margin="normal"
-              required
               fullWidth
+              id="password"
               name="password"
               label="Password"
               type="password"
-              id="password"
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -121,7 +135,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
             </Grid>
-          </Box>
+          </form>
         </Box>
       </Container>
     </ThemeProvider>

@@ -1,13 +1,24 @@
+import { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 function Contact() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    // Perform submission logic here
+    // For demonstration purposes, let's just set submitted to true
+    setSubmitted(true);
+  };
+
   return (
     <>
       <div className="contact-container">
         <h1 className="about-text">Talk to us</h1>
-      </div>{" "}
+      </div>
       <div className="form">
         <Box
           sx={{
@@ -18,23 +29,79 @@ function Contact() {
             },
           }}
         >
-          <TextField fullWidth label="Name" id="fullWidth" />
-          <TextField fullWidth label="Email" id="fullWidth" />
-          <TextField fullWidth label="Subject" id="fullWidth" />
-          <TextField
-            fullWidth
-            label="Additional information"
-            id="fullWidth           maxRows={4}
-"
-            multiline
-            rows={4}
-          />
-          <Button
-            variant="contained"
-            style={{ backgroundColor: "black", color: "white", marginTop: 30 }}
+          <Formik
+            initialValues={{
+              name: "",
+              email: "",
+              subject: "",
+              additionalInfo: "",
+            }}
+            validationSchema={Yup.object({
+              name: Yup.string().required("Name is required"),
+              email: Yup.string()
+                .email("Invalid email address")
+                .required("Email is required"),
+              subject: Yup.string().required("Subject is required"),
+              additionalInfo: Yup.string(),
+            })}
+            onSubmit={(values, { setSubmitting }) => {
+              // Call your handleSubmit function here
+              handleSubmit();
+              setSubmitting(false);
+            }}
           >
-            Submit
-          </Button>
+            <Form>
+              <Field
+                as={TextField}
+                fullWidth
+                label="Name"
+                name="name"
+                id="name"
+              />
+              <ErrorMessage name="name" component="div" />
+
+              <Field
+                as={TextField}
+                fullWidth
+                label="Email"
+                name="email"
+                id="email"
+              />
+              <ErrorMessage name="email" component="div" />
+
+              <Field
+                as={TextField}
+                fullWidth
+                label="Subject"
+                name="subject"
+                id="subject"
+              />
+              <ErrorMessage name="subject" component="div" />
+
+              <Field
+                as={TextField}
+                fullWidth
+                label="Additional information"
+                name="additionalInfo"
+                id="additionalInfo"
+                multiline
+                rows={4}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  marginTop: 30,
+                  width: "100%", // Make the button wider
+                }}
+              >
+                Submit
+              </Button>
+            </Form>
+          </Formik>
+          {submitted && <p>Thank you for contacting us!</p>}
         </Box>
       </div>
     </>
