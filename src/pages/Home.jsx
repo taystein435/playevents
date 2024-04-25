@@ -44,10 +44,6 @@ function Home() {
         header="Categories"
         endpoint={`https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&dmaId=324&apikey=${apiKey}`}
       />
-      <HRow
-        header="Family"
-        endpoint={`https://app.ticketmaster.com/discovery/v2/events.json?classificationName=theatre&dmaId=324&apikey=${apiKey}`}
-      />
       <Gdpr />
     </div>
   );
