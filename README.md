@@ -47,3 +47,15 @@ Netlify: The application is hosted and deployed on Netlify, leveraging its featu
 #Get your developer API Key from https://developer-acct.ticketmaster.com/user/register
 
 #npm run dev
+
+
+References:
+
+[1] Safak Kocaoglu. (2023). E-commerce. GitHub Repository. https://github.com/safak/youtube2022.git
+
+[2] Rafel Qazi (2021).  How to Build a NETFLIX Clone with REACT JS for Beginners (in 3 Hours!) [Video]. YouTube. https://www.youtube.com/watch?v=XtMThy8QKqU&t=9643s
+
+[3] Safak (2021).  Redux For Beginners | Redux Tutorial with Redux Toolkit
+[Video]. YouTube. https://www.youtube.com/watch?v=DYtYyFOfpBY&t=1286s
+
+[4] ChatGPT. (2024). Debugging
