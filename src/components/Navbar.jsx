@@ -1,10 +1,11 @@
-/* eslint-disable no-undef */
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close"; // Import the CloseIcon
 import { Link } from "react-router-dom";
-import { logout } from "../redux/authSlice"
-import logo from "../assets/logow.png"; 
+import { logout } from "../redux/authSlice";
+import logo from "../assets/logow.png";
+
 export default function Navbar() {
   const [showNavbar, setShowNavbar] = useState(false);
   const user = useSelector((state) => state.auth.user);
@@ -24,15 +25,14 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="container">
-        <img
-          src={logo}
-          className="logo"
-          alt=""
-        />
-        <div className="menu-icon" onClick={handleShowNavbar}>
-          <MenuIcon />
+        <img src={logo} className="logo" alt="" />
+        <div
+          className={`menu-icon ${showNavbar ? "active" : ""}`}
+          onClick={handleShowNavbar}
+        >
+          {showNavbar ? <CloseIcon /> : <MenuIcon />} {/* Toggle between MenuIcon and CloseIcon */}
         </div>
-        <div className={`nav-elements ${showNavbar && "active"}`}>
+        <div className={`nav-elements ${showNavbar ? "active" : "inactive"}`}>
           <ul>
             <li>
               <Link to="/">Home</Link>
@@ -44,7 +44,7 @@ export default function Navbar() {
               <Link to="/contact">Contact</Link>
             </li>
             <li>
-              <Link to="/services">Events</Link>
+              <Link to="/events">Events</Link>
             </li>
             <li>
               <Link to="/faq">Faqs</Link>

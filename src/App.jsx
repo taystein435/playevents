@@ -9,6 +9,8 @@ import Faq from './pages/Faq';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
 import Event from './pages/Event';
+import Events from './pages/Events';
+
 function App() {
   const Layout = () => {
     return (
@@ -53,6 +55,10 @@ function App() {
         {
           path: "/contact",
           element: <Contact />,
+        },
+        {
+          path: "/events",
+          element: <Events />,
         },
      
       ],
