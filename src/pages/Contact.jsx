@@ -9,8 +9,6 @@ function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = () => {
-    // Perform submission logic here
-    // For demonstration purposes, let's just set submitted to true
     setSubmitted(true);
   };
 
@@ -45,7 +43,6 @@ function Contact() {
               additionalInfo: Yup.string(),
             })}
             onSubmit={(values, { setSubmitting }) => {
-              // Call your handleSubmit function here
               handleSubmit();
               setSubmitting(false);
             }}
@@ -94,7 +91,7 @@ function Contact() {
                   backgroundColor: "black",
                   color: "white",
                   marginTop: 30,
-                  width: "100%", // Make the button wider
+                  width: "100%", 
                 }}
               >
                 Submit

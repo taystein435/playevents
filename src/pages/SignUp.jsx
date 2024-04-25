@@ -27,10 +27,10 @@ export default function SignUp() {
   const handleSignUp = (values) => {
     const { username, email, password } = values;
 
-    // Dispatch the username to the store
+    
     dispatch(setUser(username));
 
-    // Create user account
+  
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;

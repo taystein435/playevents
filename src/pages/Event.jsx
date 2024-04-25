@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
-
 function Event() {
   const [eventData, setEventData] = useState(null);
   const [loading, setLoading] = useState(true);

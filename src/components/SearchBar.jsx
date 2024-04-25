@@ -1,16 +1,41 @@
-/* eslint-disable react/jsx-key */
+import { useEffect, useState } from "react";
+import Axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
+
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useState } from "react";
 
 export default function SearchBar() {
-  const fixedOptions = [top100Events[1]];
-  const [value, setValue] = useState([
-    ...fixedOptions,
-    top100Events[13],
-    top100Events[2],
-  ]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [value, setValue] = useState([]);
+  const apiKey = import.meta.env.VITE_TICKETMASTER_API_KEY;
+  const history = useNavigate()
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await Axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&dmaId=324&apikey=${apiKey}`); 
+        const uniqueImageUrls = {};
+        const filteredEvents = res.data._embedded.events.filter((item) => {
+          if (!uniqueImageUrls[item.images[0].url]) {
+            uniqueImageUrls[item.images[0].url] = true;
+            return true;
+          }
+          return false;
+        });
+        setData(filteredEvents);
+        console.log(data)
+      } catch (err) {
+        setError(err);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Autocomplete
@@ -18,55 +43,36 @@ export default function SearchBar() {
       id="fixed-tags-demo"
       value={value}
       onChange={(event, newValue) => {
-        setValue([
-          ...fixedOptions,
-          ...newValue.filter((option) => fixedOptions.indexOf(option) === -1),
-        ]);
+        setValue(newValue);
+        if (newValue) {
+          console.log(newValue)
+          history(`/event/${newValue[0].id}`);
+        }
       }}
-      options={top100Events}
-      getOptionLabel={(option) => option.title}
+      options={data} 
+      getOptionLabel={(option) => option.name}
       renderTags={(tagValue, getTagProps) =>
         tagValue.map((option, index) => (
           <Chip
-            label={option.title}
+            key={index}
+            label={option.name}
             {...getTagProps({ index })}
-            disabled={fixedOptions.indexOf(option) !== -1}
           />
         ))
       }
       style={{
         width: 1200,
         marginTop: 70,
-        marginLeft:40,
+        marginLeft: 40,
         marginBottom: 50
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Search Events" placeholder="Top Events" />
+        <TextField
+          {...params}
+          label="Search Events"
+          placeholder="Top Events"
+        />
       )}
     />
   );
 }
-
-const top100Events = [
-  { title: "Milwaukee Bucks vs. Phoenix Suns", year: 2024 },
-  { title: "P!NK: Summer Carnival 2024", year: 2024 },
-  { title: "Oklahoma City Thunder vs. Phoenix Suns", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "Milwaukee Bucks vs. Phoenix Suns", year: 2024 },
-  { title: "P!NK: Summer Carnival 2024", year: 2024 },
-  { title: "Oklahoma City Thunder vs. Phoenix Suns", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "Milwaukee Bucks vs. Phoenix Suns", year: 2024 },
-  { title: "P!NK: Summer Carnival 2024", year: 2024 },
-  { title: "Oklahoma City Thunder vs. Phoenix Suns", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "Milwaukee Bucks vs. Phoenix Suns", year: 2024 },
-  { title: "P!NK: Summer Carnival 2024", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-  { title: "Milwaukee Bucks vs. Phoenix Suns", year: 2024 },
-  { title: "The Shawshank2 Redemption", year: 2024 },
-  { title: "The Shawshank Redemption", year: 2024 },
-];

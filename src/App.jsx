@@ -8,7 +8,6 @@ import Footer from './components/Footer';
 import Faq from './pages/Faq';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
-import Services from './pages/Services';
 import Event from './pages/Event';
 function App() {
   const Layout = () => {
@@ -55,10 +54,7 @@ function App() {
           path: "/contact",
           element: <Contact />,
         },
-        {
-          path: "/services",
-          element: <Services />,
-        },
+     
       ],
     },
   
